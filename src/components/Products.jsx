@@ -15,7 +15,7 @@ const Products = () => {
     }, [])
 
     const handleAdd = (product) => {
-dispatch(add(product))
+        dispatch(add(product))
     }
     return (
         <div className='productsWrapper'>
