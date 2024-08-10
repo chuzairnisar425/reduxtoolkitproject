@@ -5,6 +5,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Cart from './pages/Cart'
 import Navbar from './components/Navbar'
+import { Provider } from 'react-redux'
+import Store from './store/Store'
 
 function App() {
 
@@ -12,7 +14,8 @@ function App() {
     <>
       <div className='App'>
 
-        <BrowserRouter>
+       <Provider store={Store}>
+       <BrowserRouter>
         <Navbar/>
           <Routes>
             <Route path='/' element={<Home />}> </Route>
@@ -21,6 +24,7 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
+       </Provider>
       </div>
 
     </>

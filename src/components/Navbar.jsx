@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 const Navbar = () => {
   return (
-    <div style={{display:'flex',alignItems:'space-between'}}>
+    <div style={{display:'flex',alignItems:'center', justifyItems:'space-between'}}>
     <span className='logo'>
         Redux Store
     </span>
