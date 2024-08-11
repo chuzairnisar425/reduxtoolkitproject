@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const STATUSES = Object.freeze({
+export const STATUSES = Object.freeze({
   IDLE: " idle",
   ERROR: " error",
   LOADING: "loading",
@@ -13,12 +13,28 @@ const productSlice = createSlice({
     status: STATUSES.IDLE,
   },
   reducers: {
-    setProducts(state, action) {
-      state.data = action.payload;
-    }, setStatus(state, action) {
-      state.status = action.payload;
-    },
+    // setProducts(state, action) {
+    //   state.data = action.payload;
+    // }, setStatus(state, action) {
+    //   state.status = action.payload;
+    // },
+
+
   },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state, action) => {
+        state.status = STATUSES.LOADING;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.data = action.payload
+        state.status = STATUSES.IDLE;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = STATUSES.ERROR;
+      })
+  }
 });
 
 export const { setProducts, setStatus } = productSlice.actions;
@@ -26,20 +42,40 @@ export default productSlice.reducer;
 
 // thunks
 
-export function fetchProducts() {
-  return async function fetchProductsThunk(dispatch, getstate) {
-    dispatch(setStatus(STATUSES.LOADING));
+export const fetchProducts = createAsyncThunk('products/fetch', async () => {
 
-    try {
-      const res = await fetch("https://fakestoreapi.com/products");
-      const data = await res.json();
-      dispatch(setProducts(data))
-      dispatch(setStatus(STATUSES.IDLE));
+  const res = await fetch("https://fakestoreapi.com/products");
+  const data = await res.json();
+  return data
 
-    } catch (error) {
-      console.log(err)
-      dispatch(setStatus(STATUSES.ERROR));
+})
 
-    }
-  };
-}
+
+
+
+
+
+
+
+
+
+
+
+// export function fetchProducts() {
+//   return async function fetchProductsThunk(dispatch, getstate) {
+//     dispatch(setStatus(STATUSES.LOADING));
+
+//     try {
+//       const res = await fetch("https://fakestoreapi.com/products");
+//       const data = await res.json();
+//       dispatch(setProducts(data))
+//       dispatch(setStatus(STATUSES.IDLE));
+
+//     } catch (error) {
+//       console.log(err)
+//       dispatch(setStatus(STATUSES.ERROR));
+
+//     }
+//   };
+// }
+
